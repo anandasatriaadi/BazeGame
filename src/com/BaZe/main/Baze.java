@@ -15,8 +15,8 @@ public class Baze extends Canvas implements Runnable{
 
 	private static final long serialVersionUID = 1652027885447519067L;
 	
-	public static int WIDTH = 960, HEIGHT = WIDTH / 16 * 9;
-	public static float speed = (float) Math.ceil(WIDTH/160);
+	public static int WIDTH = 960, HEIGHT = WIDTH / 16 * 10;
+	public static float speed = (float) Math.ceil(WIDTH/80);
 	
 	private Thread gameThread;
 	private boolean running = false;
@@ -37,10 +37,10 @@ public class Baze extends Canvas implements Runnable{
 		int ballX = 0;
 		int ballY = 0;
 		boolean foundBall = false;
-		new Window(WIDTH, HEIGHT, "Test Tile", this);
 		
 //		Map: 0 = Floor, 1 = Wall, 9 = Ball
 		int[][] map = {
+				{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 				{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 				{1,9,0,1,0,0,0,1,0,1,1,0,0,0,0,1},
 				{1,1,0,1,1,0,0,0,0,1,1,0,1,1,0,1},
@@ -51,12 +51,13 @@ public class Baze extends Canvas implements Runnable{
 				{1,0,1,0,0,1,0,0,0,0,1,0,0,0,0,1},
 				{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 		};
+		new Window(WIDTH, HEIGHT, "Test Tile", this);
 		
 		try {			
 			//	Adding gameObjects
 			//		Tiles
-			for(int i = 0; i < 9; i++) {
-				for(int j = 0; j < 16; j++) {	
+			for(int i = 0; i < map.length; i++) {
+				for(int j = 0; j < map[0].length; j++) {	
 					if(map[i][j] == 1) {
 						Tile wallTile = new WallTile(j * tileSide,
 								i * tileSide, ID.wallTile, tileSide );
@@ -71,8 +72,8 @@ public class Baze extends Canvas implements Runnable{
 					}
 					
 					if(map[i][j] == 9 && !foundBall) {
-						ballX = i;
-						ballY = j;
+						ballX = j;
+						ballY = i;
 						foundBall = true;
 					}
 				}
