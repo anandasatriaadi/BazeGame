@@ -50,4 +50,9 @@ public class Handler {
 	public void removeTileObject(Tile tile) {
 		this.tile.remove(tile);
 	}
+	
+	public void reset() {
+		tile = new LinkedList<Tile>();
+		gameObject = new LinkedList<GameObject>();
+	}
 }

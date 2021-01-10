@@ -4,6 +4,8 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import com.BaZe.input.KeyInput;
 import com.BaZe.input.MouseInput;
@@ -17,7 +19,8 @@ public class Baze extends Canvas implements Runnable{
 	
 	public static final int WIDTH = 960, HEIGHT = WIDTH / 16 * 10;
 	public static float speed = (float) Math.ceil(WIDTH/80);
-	
+	private static final DateTimeFormatter TIMEFORMATER = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss");
+
 	private Window window;
 	private Thread gameThread;
 	private boolean running = false;
@@ -31,8 +34,6 @@ public class Baze extends Canvas implements Runnable{
 	private MouseInput mouseInput;
 	
 	public static boolean debug = true;
-	private static int passedFloor = 0;
-	private static int totalFloor = 0;
 	
 	public Baze() {
 		handler = new Handler();
@@ -43,7 +44,6 @@ public class Baze extends Canvas implements Runnable{
 		this.addMouseListener(mouseInput);
 
 		window = new Window(WIDTH, HEIGHT, this);;
-		
 	}
 	
 	public synchronized void start() {
@@ -88,7 +88,7 @@ public class Baze extends Canvas implements Runnable{
 			
 			if(System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
-				System.out.println("FPS: " + frames);
+				Logs("FPS: " + frames);
 				frames = 0;
 			};
 			
@@ -145,14 +145,6 @@ public class Baze extends Canvas implements Runnable{
 	public static void main(String[] args) {
 		new Baze();
 	}
-
-	public static int getPassedFloor() {
-		return passedFloor;
-	}
-
-	public static void setPassedFloor(int passedFloor) {
-		Baze.passedFloor = passedFloor;
-	}
 	
 	public void init() {
 		gameState = new GameState(window, handler);
@@ -166,5 +158,13 @@ public class Baze extends Canvas implements Runnable{
 
 	public static State getGameState() {
 		return gameState;
+	}
+	
+	public static void Logs(String msg) {
+		System.out.println(TIMEFORMATER.format(LocalDateTime.now()) + " : " + msg);		
+	}
+	
+	public static void updatePassedFloor(int value) {
+		gameState.setPassedFloor(gameState.getPassedFloor() + value);
 	}
 }

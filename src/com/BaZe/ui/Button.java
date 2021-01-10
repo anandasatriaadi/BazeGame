@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 
 import com.BaZe.input.MouseInput;
+import com.BaZe.main.Baze;
 
 public class Button {
 
@@ -55,7 +56,7 @@ public class Button {
 		int stringHeight = (int) (fm.getStringBounds(text, g).getHeight());
 		
 		if(onHover) {
-			System.out.println(String.format("Height %d Width %d", stringHeight, stringWidth));
+			Baze.Logs(this + " mouse in");
 			g.setColor(darkerBGColor);
 			g.fillRoundRect(x - (stringWidth/2 + 20), y - (stringHeight/2 + 3), stringWidth + 40, stringHeight + 6, 50, 50);
 			Text.drawString(g, text, x, y, true, fontColor, font);

@@ -3,7 +3,10 @@ package com.BaZe.states;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import com.BaZe.entity.Ball;
 import com.BaZe.main.Baze;
@@ -21,8 +24,18 @@ public class GameState extends State{
 
 	Font displayFont = new Font("Comic Sans", Font.PLAIN, 24);
 	ArrayList<Button> buttons = new ArrayList<Button>();
-	
 	private Handler handler;
+	
+	private static final int ROWS = 10;
+	private static final int COLUMNS = 16;
+	private static final int TILESIDE = Baze.WIDTH/16;
+	private int totalFloor;
+	private int passedFloor;
+	private int currentLevel = 1;
+	
+	private int[][] map;
+	private int ballX;
+	private int ballY;
 	
 	public GameState(Window window, Handler handler) {
 		super(window, handler);
@@ -36,53 +49,64 @@ public class GameState extends State{
 					}
 				}, displayFont, new Color(85, 155, 185), new Color(200, 200, 200)));
 		
-		int 	ballX = 0,
-				ballY = 0;
-		boolean foundBall = false;
-		int 	totalFloor = 0;
-		int 	tileSide = Baze.WIDTH / 16;
+		buttons.add(new Button("Next", 850, 50, new Click() {
+			@Override
+			public void onClick() {
+				System.out.println("Clicked");
+				State.currentState = Baze.getMenuState();
+			}
+		}, displayFont, new Color(85, 155, 185), new Color(200, 200, 200)));
 		
-//		Map: 0 = Floor, 1 = Wall, 9 = Ball
-		int[][] map = {
-				{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-				{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-				{1,9,0,1,0,0,0,1,0,1,1,0,0,0,0,1},
-				{1,1,0,1,1,0,0,0,0,1,1,0,1,1,0,1},
-				{1,0,0,0,0,0,1,1,0,1,1,0,1,1,0,1},
-				{1,1,0,1,0,1,0,0,0,0,0,0,1,1,0,1},
-				{1,0,0,0,0,1,1,1,0,1,0,0,0,1,0,1},
-				{1,0,1,1,0,1,0,1,0,0,0,1,0,1,0,1},
-				{1,0,1,0,0,1,0,0,0,0,1,0,0,0,0,1},
-				{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-		};
+		this.loadLevel(currentLevel);
+	}
+	
+	private void loadLevel(int level) {
+		totalFloor = 0;
+		passedFloor = 0;
+		map = new int[ROWS][COLUMNS];
 		
-		try {			
-			//	Adding gameObjects
-			//		Tiles
-			for(int i = 0; i < map.length; i++) {
-				for(int j = 0; j < map[0].length; j++) {	
+		try {
+			File levelFile = new File("resources/level/"+level+".txt");
+			Scanner input = new Scanner(levelFile);
+			
+			for(int i=0; i<ROWS; i++) {
+				for(int j=0; j<COLUMNS; j++) {
+					if(input.hasNextInt())
+			        {
+			            map[i][j] = input.nextInt();
+			        }
+				}
+			}
+			input.close();
+		}catch (FileNotFoundException e) {
+		      System.out.println("Error file level not found");
+		      e.printStackTrace();
+		}
+		
+		// Trying to add gameObjects
+		try {
+			// Add Tiles
+			for(int i = 0; i < ROWS; i++) {
+				for(int j = 0; j < COLUMNS; j++) {	
 					if(map[i][j] == 1) {
-						Tile wallTile = new WallTile(j * tileSide,
-								i * tileSide, ID.wallTile, tileSide );
-						System.out.println("Added WallTile " + j * tileSide + " " + i * tileSide);;
+						Tile wallTile = new WallTile(j * TILESIDE, i * TILESIDE, ID.wallTile, TILESIDE);
+						Baze.Logs("Added WallTile " + j * TILESIDE + " " + i * TILESIDE);
 						handler.addTileObject(wallTile);
 					} else {
-						Tile floorTile = new FloorTile(j * tileSide,
-								i * tileSide, ID.floorTile, tileSide );
-						System.out.println("Added FloorTile " + j * tileSide + " " + i * tileSide);
+						Tile floorTile = new FloorTile(j * TILESIDE, i * TILESIDE, ID.floorTile, TILESIDE );
+						Baze.Logs("Added FloorTile " + j * TILESIDE + " " + i * TILESIDE);
 						handler.addTileObject(floorTile);
 						totalFloor++;
 					}
 					
-					if(map[i][j] == 9 && !foundBall) {
+					if(map[i][j] == 9) {
 						ballX = j;
 						ballY = i;
-						foundBall = true;
 					}
 				}
 			}
 			
-			GameObject ball = new Ball(ballX * tileSide + 6, ballY * tileSide + 6, tileSide, ID.ball, handler);
+			GameObject ball = new Ball(ballX * TILESIDE + 6, ballY * TILESIDE + 6, TILESIDE, ID.ball, handler);
 			handler.addGameObject(ball);
 		} catch(Exception e){
 			e.printStackTrace();
@@ -114,4 +138,17 @@ public class GameState extends State{
 		}
 	}
 
+	public int getPassedFloor() {
+		return passedFloor;
+	}
+
+	public void setPassedFloor(int passedFloor) {
+		this.passedFloor = passedFloor;
+		Baze.Logs("passedFloor : " + passedFloor + "/" + totalFloor);
+		if(passedFloor == totalFloor) {
+			handler.reset();
+			this.currentLevel++;
+			loadLevel(this.currentLevel);
+		}
+	}
 }

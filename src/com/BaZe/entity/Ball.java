@@ -81,8 +81,7 @@ public class Ball extends GameObject{
 				if(getBounds().intersects(tempObject.getBounds()) && !tempObject.isPassed) {
 					tempObject.color = defaultColor.darker().darker().darker();
 					tempObject.isPassed = true;
-					Baze.setPassedFloor(Baze.getPassedFloor() + 1);
-					System.out.println(Baze.getPassedFloor());
+					Baze.updatePassedFloor(1);
 				}
 			}
 		}
