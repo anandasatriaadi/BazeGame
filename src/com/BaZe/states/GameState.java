@@ -31,7 +31,7 @@ public class GameState extends State{
 	private static final int TILESIDE = Baze.WIDTH/COLUMNS;
 	private int totalFloor;
 	private int passedFloor;
-	private int currentLevel = 5;
+	private int currentLevel = 1;
 	
 	private int[][] map;
 	private int ballX;
