@@ -5,85 +5,45 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
-import com.BaZe.entity.Ball;
 import com.BaZe.input.KeyInput;
-import com.BaZe.tile.FloorTile;
-import com.BaZe.tile.Tile;
-import com.BaZe.tile.WallTile;
+import com.BaZe.input.MouseInput;
+import com.BaZe.states.GameState;
+import com.BaZe.states.MenuState;
+import com.BaZe.states.State;
 
 public class Baze extends Canvas implements Runnable{
 
 	private static final long serialVersionUID = 1652027885447519067L;
 	
-	public static int WIDTH = 960, HEIGHT = WIDTH / 16 * 10;
+	public static final int WIDTH = 960, HEIGHT = WIDTH / 16 * 10;
 	public static float speed = (float) Math.ceil(WIDTH/80);
 	
+	private Window window;
 	private Thread gameThread;
 	private boolean running = false;
 	
 	private Handler handler;
 	private HUD hud;
 	
-	public static boolean debug = false;
+	private static MenuState menuState;
+	private static GameState gameState;
+	
+	private MouseInput mouseInput;
+	
+	public static boolean debug = true;
 	private static int passedFloor = 0;
 	private static int totalFloor = 0;
 	
 	public Baze() {
 		handler = new Handler();
 		hud = new HUD();
+		mouseInput = new MouseInput();
 		this.addKeyListener(new KeyInput(handler));
+		this.addMouseMotionListener(mouseInput);
+		this.addMouseListener(mouseInput);
+
+		window = new Window(WIDTH, HEIGHT, this);;
 		
-		int tileSide = WIDTH / 16;
-		int ballX = 0;
-		int ballY = 0;
-		boolean foundBall = false;
-		
-//		Map: 0 = Floor, 1 = Wall, 9 = Ball
-		int[][] map = {
-				{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-				{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-				{1,9,0,1,0,0,0,1,0,1,1,0,0,0,0,1},
-				{1,1,0,1,1,0,0,0,0,1,1,0,1,1,0,1},
-				{1,0,0,0,0,0,1,1,0,1,1,0,1,1,0,1},
-				{1,1,0,1,0,1,0,0,0,0,0,0,1,1,0,1},
-				{1,0,0,0,0,1,1,1,0,1,0,0,0,1,0,1},
-				{1,0,1,1,0,1,0,1,0,0,0,1,0,1,0,1},
-				{1,0,1,0,0,1,0,0,0,0,1,0,0,0,0,1},
-				{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-		};
-		new Window(WIDTH, HEIGHT, "Test Tile", this);
-		
-		try {			
-			//	Adding gameObjects
-			//		Tiles
-			for(int i = 0; i < map.length; i++) {
-				for(int j = 0; j < map[0].length; j++) {	
-					if(map[i][j] == 1) {
-						Tile wallTile = new WallTile(j * tileSide,
-								i * tileSide, ID.wallTile, tileSide );
-						System.out.println("Added WallTile " + j * tileSide + " " + i * tileSide);;
-						handler.addTileObject(wallTile);
-					} else {
-						Tile floorTile = new FloorTile(j * tileSide,
-								i * tileSide, ID.floorTile, tileSide );
-						System.out.println("Added FloorTile " + j * tileSide + " " + i * tileSide);
-						handler.addTileObject(floorTile);
-						totalFloor++;
-					}
-					
-					if(map[i][j] == 9 && !foundBall) {
-						ballX = j;
-						ballY = i;
-						foundBall = true;
-					}
-				}
-			}
-			
-			GameObject ball = new Ball(ballX * tileSide + 6, ballY * tileSide + 6, tileSide, ID.ball, handler);
-			handler.addGameObject(ball);
-		} catch(Exception e){
-			e.printStackTrace();
-		}
 	}
 	
 	public synchronized void start() {
@@ -111,6 +71,8 @@ public class Baze extends Canvas implements Runnable{
 		long timer = System.currentTimeMillis();
 		int frames = 0;
 		
+		init();
+		
 		while(running) {
 			long now = System.nanoTime();
 			delta += (now - lastTime) / ns;
@@ -130,9 +92,6 @@ public class Baze extends Canvas implements Runnable{
 				frames = 0;
 			};
 			
-			if(totalFloor == passedFloor) {
-				stop();
-			}
 		}
 		
 		stop();
@@ -141,10 +100,14 @@ public class Baze extends Canvas implements Runnable{
 	private void tick() {
 		handler.tick();
 		hud.tick();
+		if(State.currentState != null) {
+//			System.out.println(State.currentState);
+			State.currentState.tick();
+		}
 	}
 	
 	private void render() {
-		Color backgroundColor = new Color(0, 0, 0);
+		Color backgroundColor = new Color(185, 185, 185);
 		
 		BufferStrategy bs = this.getBufferStrategy();
 		
@@ -158,8 +121,12 @@ public class Baze extends Canvas implements Runnable{
 		g.setColor(backgroundColor);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		
-		handler.render(g);
-		hud.render(g);
+//		handler.render(g);
+//		
+		if(State.currentState != null) {
+//			System.out.println(State.currentState);
+			State.currentState.render(g);
+		}
 		
 		g.dispose();
 		bs.show();
@@ -185,5 +152,19 @@ public class Baze extends Canvas implements Runnable{
 
 	public static void setPassedFloor(int passedFloor) {
 		Baze.passedFloor = passedFloor;
+	}
+	
+	public void init() {
+		gameState = new GameState(window, handler);
+		menuState = new MenuState(window, handler);
+		State.currentState = gameState;
+	}
+
+	public static State getMenuState() {
+		return menuState;
+	}
+
+	public static State getGameState() {
+		return gameState;
 	}
 }

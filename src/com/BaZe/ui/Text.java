@@ -11,9 +11,10 @@ public class Text {
 		int y = posY;
 		
 		FontMetrics fm = g.getFontMetrics(font);
+		int stringWidth = (int) (fm.getStringBounds(text, g).getWidth());
 		
 		if(center) {
-			x = y + fm.stringWidth(text) / 2 - 20;
+			x = x - (stringWidth / 2);
 			y = (y - fm.getHeight() / 2) + fm.getAscent();
 		}
 		g.setColor(color);

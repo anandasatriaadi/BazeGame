@@ -6,7 +6,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
-import com.BaZe.input.MouseManager;
+import com.BaZe.input.MouseInput;
 
 public class Button {
 
@@ -17,16 +17,18 @@ public class Button {
 	private boolean onHover;
 	private Click click;
 	private Font font;
-	private Color color;
+	private Color bgColor, darkerBGColor, fontColor;
 	
-	public Button(String text, int x, int y, Click click, Font font, Color color) {
-		this.text = text;
+	public Button(String text, int x, int y, Click click, Font font, Color bgColor, Color fontColor) {
 		this.x = x;
 		this.y = y;
-		this.click = click;
-		onHover = false;
+		this.text = text;
 		this.font = font;
-		this.color = color;
+		this.click = click;
+		this.bgColor = bgColor;
+		this.fontColor = fontColor;
+		this.darkerBGColor = bgColor.darker();
+		onHover = false;
 	}
 	
 	public void updateText(String text) {
@@ -34,9 +36,10 @@ public class Button {
 	}
 	
 	public void tick() {
-		if(bounds != null && bounds.contains(MouseManager.x, MouseManager.y)) {
+		if(bounds != null && bounds.contains(MouseInput.x, MouseInput.y)) {
 			onHover = true;
-			if(MouseManager.left) {
+//			System.out.println(MouseInput.x + " " + MouseInput.y);			
+			if(MouseInput.left) {
 				click.onClick();
 			}
 		} else {
@@ -48,18 +51,19 @@ public class Button {
 		g.setFont(font);
 		fm = g.getFontMetrics(font);
 		
-//		System.out.println(fm.stringWidth(text));
+		int stringWidth = (int) (fm.getStringBounds(text, g).getWidth());
+		int stringHeight = (int) (fm.getStringBounds(text, g).getHeight());
 		
 		if(onHover) {
-			Color darkColor = color.darker();
-			g.setColor(darkColor);
-			g.fillRoundRect(x + fm.stringWidth(text)/2 - 20, y - fm.getHeight()/2 - 3, (int) (fm.stringWidth(text) + 40), fm.getHeight() + 6, 45, 45);
-			Text.drawString(g, text, x, y, true, new Color(200, 200, 200), font);
+			System.out.println(String.format("Height %d Width %d", stringHeight, stringWidth));
+			g.setColor(darkerBGColor);
+			g.fillRoundRect(x - (stringWidth/2 + 20), y - (stringHeight/2 + 3), stringWidth + 40, stringHeight + 6, 50, 50);
+			Text.drawString(g, text, x, y, true, fontColor, font);
 		} else {
-			g.setColor(color);
-			g.fillRoundRect(x + fm.stringWidth(text)/2 - 20, y - fm.getHeight()/2 - 3, (int) (fm.stringWidth(text) + 40), fm.getHeight() + 6, 45, 45);
-			Text.drawString(g, text, x, y, true, new Color(200, 200, 200), font);
+			g.setColor(bgColor);
+			g.fillRoundRect(x - (stringWidth/2 + 20), y - (stringHeight/2 + 3), stringWidth + 40, stringHeight + 6, 50, 50);
+			Text.drawString(g, text, x, y, true, fontColor, font);
 		}
-		bounds = new Rectangle(x + fm.stringWidth(text)/2, y - fm.getHeight()/2, fm.stringWidth(text), fm.getHeight());
+		bounds = new Rectangle(x - 10, y - stringHeight/2 - 3, stringWidth + 30, stringHeight + 6);
 	}
 }

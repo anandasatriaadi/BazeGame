@@ -3,11 +3,11 @@ package com.BaZe.input;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class MouseManager extends MouseAdapter{
+public class MouseInput extends MouseAdapter{
 	public static int x, y;
 	public static boolean left;
 	
-	public MouseManager() {
+	public MouseInput() {
 		this.x = 0;
 		this.y = 0;
 	}

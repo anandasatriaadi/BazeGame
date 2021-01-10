@@ -9,7 +9,7 @@ import com.BaZe.ui.Button;
 public class HUD {
 	private static int noMoves = 0;
 	private static Button moves = new Button(
-			"Moves: ", 15, 35, null, new Font("Comic Sans", Font.PLAIN, 24), new Color(85, 155, 185));
+			"Moves: ", 15, 35, null, new Font("Comic Sans", Font.PLAIN, 24), new Color(85, 155, 185), new Color(200,200,200));
 	
 	public void tick() {
 		moves.updateText("Moves: " + noMoves);
