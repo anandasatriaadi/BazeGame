@@ -26,12 +26,12 @@ public class GameState extends State{
 	ArrayList<Button> buttons = new ArrayList<Button>();
 	private Handler handler;
 	
-	private static final int ROWS = 10;
+	private static final int ROWS = 12;
 	private static final int COLUMNS = 16;
-	private static final int TILESIDE = Baze.WIDTH/16;
+	private static final int TILESIDE = Baze.WIDTH/COLUMNS;
 	private int totalFloor;
 	private int passedFloor;
-	private int currentLevel = 1;
+	private int currentLevel = 5;
 	
 	private int[][] map;
 	private int ballX;

@@ -17,8 +17,8 @@ public class Baze extends Canvas implements Runnable{
 
 	private static final long serialVersionUID = 1652027885447519067L;
 	
-	public static final int WIDTH = 960, HEIGHT = WIDTH / 16 * 10;
-	public static float speed = (float) Math.ceil(WIDTH/80);
+	public static final int WIDTH = 60*16, HEIGHT = WIDTH / 16 * 12;
+	public static float speed = (float) Math.ceil(WIDTH/40);
 	private static final DateTimeFormatter TIMEFORMATER = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss");
 
 	private Window window;
