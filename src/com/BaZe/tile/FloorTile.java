@@ -23,10 +23,11 @@ public class FloorTile extends Tile{
 	}
 
 	@Override
-	public void render(Graphics g) {		
+	public void render(Graphics g) {
+		g.setColor(Color.BLACK);
+		g.fillRect(x, y, side, side);		
 		g.setColor(color);
-		g.fillRect(x, y, side, side);
-		
+		g.fillRect(x+1, y+1, side-1, side-1);
 	}
 
 	@Override

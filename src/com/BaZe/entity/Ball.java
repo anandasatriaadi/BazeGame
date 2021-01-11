@@ -9,6 +9,8 @@ import com.BaZe.main.Baze;
 import com.BaZe.main.GameObject;
 import com.BaZe.main.Handler;
 import com.BaZe.main.ID;
+import com.BaZe.main.PlaySound;
+import com.BaZe.states.State;
 import com.BaZe.tile.Tile;
 
 public class Ball extends GameObject{
@@ -75,6 +77,9 @@ public class Ball extends GameObject{
 			
 			if(tempObject.getId() == ID.wallTile) {
 				if(getBounds().intersects(tempObject.getBounds())) {
+					if(State.currentState == Baze.getGameState()) {
+						PlaySound.playSound("metal_impact.wav");					
+					}
 					if(getVelX() != 0) {
 						if(getVelX() > 0) {	
 							int wall = tempObject.getX() - tempObject.getSide();
