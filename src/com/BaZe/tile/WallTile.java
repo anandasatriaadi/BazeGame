@@ -28,7 +28,7 @@ public class WallTile extends Tile{
 
 	@Override
 	public void render(Graphics g) {
-		g.drawImage(Assets.brick_tile, x, y, null);
+		g.drawImage(Assets.metal_wall, x, y, null);
 //		g.setColor(Color.BLACK);
 //		g.fillRect(x, y, side, side);
 //		g.setColor(color);

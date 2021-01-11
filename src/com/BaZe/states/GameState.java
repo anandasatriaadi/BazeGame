@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import com.BaZe.main.Baze;
 import com.BaZe.main.GameObject;
 import com.BaZe.main.Handler;
+import com.BaZe.main.PlaySound;
 import com.BaZe.main.Window;
 import com.BaZe.tile.Level;
 import com.BaZe.tile.Tile;
@@ -49,9 +50,9 @@ public class GameState extends State{
 			}
 		}, Baze.DISPLAY_FONT, new Color(85, 155, 185), new Color(200, 200, 200)));
 		
-		txt_Level = new Text("Level : " + currentLevel, 475, 40, true, new Color(200, 200, 200) , Baze.DISPLAY_FONT);
-		txt_Progress = new Text("Progress : ", 475, 65, true, new Color(200, 200, 200) , Baze.DISPLAY_FONT);
-		txt_Time = new Text(getDuration(), 475, 90, true, new Color(200, 200, 200) , Baze.DISPLAY_FONT);
+		txt_Level = new Text("Level : " + currentLevel, 475, 40, true, new Color(15, 15, 15) , Baze.DISPLAY_FONT);
+		txt_Progress = new Text("Progress : ", 475, 65, true, new Color(15, 15, 15) , Baze.DISPLAY_FONT);
+		txt_Time = new Text(getDuration(), 475, 90, true, new Color(15, 15, 15) , Baze.DISPLAY_FONT);
 		
 		Level.levelLoader(handler, map, Integer.toString(this.currentLevel));
 	}
@@ -81,7 +82,8 @@ public class GameState extends State{
 		txt_Time.render(g);
 		
 		if(passedFloor == totalFloor) {
-			handler.reset();	
+			PlaySound.playSound("level_complete.wav", 70, false);
+			handler.reset();
 			this.currentLevel++;
 			if(this.currentLevel > MAX_LVL) {
 				State.currentState = Baze.gamefinishState;

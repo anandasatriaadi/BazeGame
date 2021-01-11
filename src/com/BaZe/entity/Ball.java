@@ -24,7 +24,7 @@ public class Ball extends GameObject{
 
 	Random rand = new Random();
 	
-	private Color defaultColor = new Color(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255));
+	private Color defaultColor = new Color(randInt(115, 215), randInt(115, 255), randInt(115, 255));
 	private Color darkerColor = defaultColor.darker();
 	private Color ballColor;
 	
@@ -133,5 +133,9 @@ public class Ball extends GameObject{
 	public void setColor(Color c) {
 		this.defaultColor = c;
 		this.darkerColor = c.darker();
+	}
+	
+	private int randInt(int min, int max) {
+		return rand.nextInt((max - min) + 1) + min;
 	}
 }

@@ -55,7 +55,7 @@ public class Baze extends Canvas implements Runnable{
 		this.addKeyListener(new KeyInput(gameHandler));
 		this.addMouseMotionListener(mouseInput);
 		this.addMouseListener(mouseInput);
-		PlaySound.playSound("MainMenuSong.wav", 70, true);
+		PlaySound.playSound("MainMenuSong.wav", 60, true);
 
 		window = new Window(WIDTH, HEIGHT, this);;
 	}
