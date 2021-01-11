@@ -28,7 +28,7 @@ public class MenuState extends State{
 		this.handler = handler;
 		
 		buttons = new ArrayList<Button>();
-		buttons.add(new Button("Play", Baze.WIDTH/2, Baze.HEIGHT/2, new Click() {
+		buttons.add(new Button("Play", Baze.WIDTH/2, Baze.HEIGHT/2, 100, 30, new Click() {
 
 			@Override
 			public void onClick() {
@@ -36,7 +36,7 @@ public class MenuState extends State{
 				Baze.RestartGame();
 				State.currentState = Baze.getGameState();
 			}
-		}, Baze.DISPLAY_FONT, new Color(185, 185, 185), new Color(45, 45, 45)));
+		}, Baze.DISPLAY_FONT, new Color(185, 125, 65), new Color(215, 215, 215)));
 		
 		Level.levelLoader(handler, map, "mainmenu");
 		
@@ -54,7 +54,7 @@ public class MenuState extends State{
 		for(Button button : buttons) {
 			button.tick();
 		}
-		if(System.currentTimeMillis() - lastTurn > 200) {
+		if(System.currentTimeMillis() - lastTurn > 100) {
 			if(ball.getVelX() == 0 && ball.getVelY() == 0) {
 				Random rand = new Random();
 				((Ball)ball).move(rand.nextInt() % 4);
