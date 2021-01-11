@@ -8,6 +8,7 @@ import java.awt.Rectangle;
 
 import com.BaZe.input.MouseInput;
 import com.BaZe.main.Baze;
+import com.BaZe.main.PlaySound;
 
 public class Button {
 	private int x, y, marginHeight, marginWidth;
@@ -55,6 +56,7 @@ public class Button {
 			onHover = true;
 			if(MouseInput.left) {
 				click.onClick();
+				PlaySound.playSound("button_click.wav", 100);
 			}
 		} else {
 			onHover = false;

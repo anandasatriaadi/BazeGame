@@ -55,6 +55,7 @@ public class Baze extends Canvas implements Runnable{
 		this.addKeyListener(new KeyInput(gameHandler));
 		this.addMouseMotionListener(mouseInput);
 		this.addMouseListener(mouseInput);
+		PlaySound.playSound("MainMenuSong.wav", 50);
 
 		window = new Window(WIDTH, HEIGHT, this);;
 	}
@@ -172,6 +173,7 @@ public class Baze extends Canvas implements Runnable{
 	}
 	
 	public static void RestartGame() {
+		startTime = System.currentTimeMillis();
 		gameHandler.reset();
 		gameState = new GameState(window, gameHandler);
 	}
