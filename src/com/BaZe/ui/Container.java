@@ -2,6 +2,8 @@ package com.BaZe.ui;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 
 public class Container {
 	private int x, y, width, height;
@@ -18,6 +20,10 @@ public class Container {
 	}
 	
 	public void render(Graphics g) {
+		if(g instanceof Graphics2D) {
+			Graphics2D g2 = (Graphics2D)g;
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		}
 		g.setColor(color);
 		if(isCenter) {
 			g.fillRect(x - (width/2), y, width, height);
@@ -31,7 +37,6 @@ public class Container {
 			this.width = 0;
 		} else {
 			this.width = n;
-			System.out.println("Set Width" + n);
 		}
 	}
 }

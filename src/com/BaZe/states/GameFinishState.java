@@ -3,6 +3,8 @@ package com.BaZe.states;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -103,6 +105,10 @@ public class GameFinishState extends State {
 
 	@Override
 	public void render(Graphics g) {
+		if(g instanceof Graphics2D) {
+			Graphics2D g2 = (Graphics2D)g;
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		}
 		for(Tile tile : handler.tile) {
 			tile.render(g);
 		}

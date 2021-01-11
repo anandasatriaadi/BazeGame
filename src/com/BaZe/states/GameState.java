@@ -2,6 +2,8 @@ package com.BaZe.states;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.util.ArrayList;
 
 import com.BaZe.main.Baze;
@@ -38,6 +40,9 @@ public class GameState extends State{
 		super(window, handler);
 		this.handler = handler;
 		
+		initButton();
+		initTitle();
+		
 		Level.levelLoader(handler, map, Integer.toString(this.currentLevel));
 	}
 
@@ -52,6 +57,10 @@ public class GameState extends State{
 
 	@Override
 	public void render(Graphics g) {
+		if(g instanceof Graphics2D) {
+			Graphics2D g2 = (Graphics2D)g;
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		}
 		for(Tile tile:handler.tile) {			
 			tile.render(g);
 		}
@@ -91,7 +100,7 @@ public class GameState extends State{
 					public void onClick() {
 						State.currentState = Baze.getMenuState();
 					}
-				}, Baze.DISPLAY_FONT, new Color(85, 155, 185), new Color(200, 200, 200)));
+				}, Baze.DISPLAY_FONT, new Color(185, 25, 0), new Color(255, 255, 255)));
 		
 		buttons.add(new Button("Restart", 850, 50, new Click() {
 			@Override
@@ -99,11 +108,19 @@ public class GameState extends State{
 				Baze.RestartGame();
 				State.currentState = Baze.getGameState();
 			}
-		}, Baze.DISPLAY_FONT, new Color(85, 155, 185), new Color(200, 200, 200)));
+		}, Baze.DISPLAY_FONT, new Color(185, 25, 0), new Color(255, 255, 255)));
 				
 	}
 	
 	private void initTitle() {
+		//Add containers
+		bgContainer = new Container(470, 20, 230, 90, new Color(65, 65, 65), true);
+		fgContainer = new Container(470 - (230/2), 105, 0, 5, new Color(85, 215, 85), false);
+		
+		//Add texts
+		txt_Level = new Text("Level : " + currentLevel, 475, 40, true, new Color(215, 215, 215) , Baze.DISPLAY_FONT);
+		txt_Progress = new Text("Progress : ", 475, 65, true, new Color(215, 215, 215) , Baze.DISPLAY_FONT);
+		txt_Time = new Text(getDuration(), 475, 90, true, new Color(215, 215, 215) , Baze.DISPLAY_FONT);
 		
 	}
 	
@@ -111,11 +128,10 @@ public class GameState extends State{
 	private String getDuration() {
 		int difference = (int) (System.currentTimeMillis() - Baze.startTime);
 		
-		if(difference > 60000) {
-			int min = difference / 60 / 1000;
+			int min = difference / 60 / 1000 % 60;
 			int sec = (difference / 1000) % 60;
-			int mili = difference / 10;
-			String minStr, secStr;
+			int mili = difference / 10 % 100;
+			String minStr, secStr, miliStr;
 			
 			if(min < 10) minStr = "0" + Integer.toString(min);
 			else minStr = Integer.toString(min);
@@ -123,9 +139,10 @@ public class GameState extends State{
 			if(sec < 10) secStr = "0" + Integer.toString(sec);
 			else secStr = Integer.toString(sec);
 			
-			return minStr + ":" + secStr;
-		}
-		return "" + (difference / 1000);
+			if(mili < 10) miliStr = "0" + Integer.toString(mili);
+			else miliStr = Integer.toString(mili);
+			
+			return minStr + ":" + secStr + "." + miliStr;
 	}
 
 	public int getPassedFloor() {

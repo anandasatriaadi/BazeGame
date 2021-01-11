@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 
 import com.BaZe.input.MouseInput;
 import com.BaZe.main.Baze;
@@ -64,6 +66,11 @@ public class Button {
 	}
 	
 	public void render(Graphics g) {
+		if(g instanceof Graphics2D) {
+			Graphics2D g2 = (Graphics2D)g;
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		}
+		
 		g.setFont(font);
 		fm = g.getFontMetrics(font);
 		
