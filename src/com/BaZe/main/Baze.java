@@ -2,6 +2,7 @@ package com.BaZe.main;
 
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.time.LocalDateTime;
@@ -9,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 
 import com.BaZe.input.KeyInput;
 import com.BaZe.input.MouseInput;
+import com.BaZe.states.GameFinishState;
 import com.BaZe.states.GameState;
 import com.BaZe.states.MenuState;
 import com.BaZe.states.State;
@@ -16,21 +18,25 @@ import com.BaZe.states.State;
 public class Baze extends Canvas implements Runnable{
 
 	private static final long serialVersionUID = 1652027885447519067L;
-	
 	public static final int WIDTH = 60*16, HEIGHT = WIDTH / 16 * 12;
 	public static float speed = (float) Math.ceil(WIDTH/40);
+	public static final Font DISPLAY_FONT = new Font("Comic Sans", Font.BOLD, 24);
 	private static final DateTimeFormatter TIMEFORMATER = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss");
-
-	private Window window;
+	
+	
+	private static Window window;
 	private Thread gameThread;
 	private boolean running = false;
 	
-	private Handler gameHandler;
+	private static Handler gameHandler;
 	private Handler menuHandler;
+	private Handler gamefinishHandler;
+
 	private HUD hud;
 	
 	private static MenuState menuState;
 	private static GameState gameState;
+	public static GameFinishState gamefinishState;
 	
 	private MouseInput mouseInput;
 	
@@ -39,6 +45,7 @@ public class Baze extends Canvas implements Runnable{
 	public Baze() {
 		gameHandler = new Handler();
 		menuHandler = new Handler();
+		gamefinishHandler = new Handler();
 		hud = new HUD();
 		
 		mouseInput = new MouseInput();
@@ -105,8 +112,10 @@ public class Baze extends Canvas implements Runnable{
 		if(State.currentState != null) {
 			if(State.currentState == gameState) {
 				gameHandler.tick();				
-			}else {
+			}else if(State.currentState == menuState) {
 				menuHandler.tick();				
+			}else {
+				gamefinishHandler.tick();
 			}
 			State.currentState.tick();
 		}
@@ -155,7 +164,12 @@ public class Baze extends Canvas implements Runnable{
 	public void init() {
 		gameState = new GameState(window, gameHandler);
 		menuState = new MenuState(window, menuHandler);
+		gamefinishState = new GameFinishState(window, gamefinishHandler);
 		State.currentState = menuState;
+	}
+	
+	public static void RestartGame() {
+		gameState = new GameState(window, gameHandler);
 	}
 
 	public static State getMenuState() {

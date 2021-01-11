@@ -22,8 +22,6 @@ import com.BaZe.ui.Click;
 import com.BaZe.ui.Text;
 
 public class GameState extends State{
-
-	Font displayFont = new Font("Comic Sans", Font.PLAIN, 24);
 	ArrayList<Button> buttons = new ArrayList<Button>();
 	ArrayList<Text> texts = new ArrayList<Text>();
 	
@@ -35,6 +33,7 @@ public class GameState extends State{
 	private static final int ROWS = 12;
 	private static final int COLUMNS = 16;
 	private static final int TILESIDE = Baze.WIDTH/COLUMNS;
+	private static final int MAX_LVL = 5;
 	private int totalFloor;
 	private int passedFloor;
 	private int currentLevel = 1;
@@ -53,18 +52,18 @@ public class GameState extends State{
 						System.out.println("Clicked");
 						State.currentState = Baze.getMenuState();
 					}
-				}, displayFont, new Color(85, 155, 185), new Color(200, 200, 200)));
+				}, Baze.DISPLAY_FONT, new Color(85, 155, 185), new Color(200, 200, 200)));
 		
-		buttons.add(new Button("Next", 850, 50, new Click() {
+		buttons.add(new Button("Restart", 850, 50, new Click() {
 			@Override
 			public void onClick() {
 				System.out.println("Clicked");
 				State.currentState = Baze.getMenuState();
 			}
-		}, displayFont, new Color(85, 155, 185), new Color(200, 200, 200)));
+		}, Baze.DISPLAY_FONT, new Color(85, 155, 185), new Color(200, 200, 200)));
 		
-		txt_Level = new Text("Level : " + currentLevel, 475, 40, true, new Color(200, 200, 200) , displayFont);
-		txt_Progress = new Text("Progress : ", 475, 65, true, new Color(200, 200, 200) , displayFont);
+		txt_Level = new Text("Level : " + currentLevel, 475, 40, true, new Color(200, 200, 200) , Baze.DISPLAY_FONT);
+		txt_Progress = new Text("Progress : ", 475, 65, true, new Color(200, 200, 200) , Baze.DISPLAY_FONT);
 		
 		this.loadLevel(currentLevel);
 	}
@@ -152,8 +151,13 @@ public class GameState extends State{
 		if(passedFloor == totalFloor) {
 			handler.reset();	
 			this.currentLevel++;
-			loadLevel(this.currentLevel);
-			txt_Level.content = "Level : "+this.currentLevel;
+			if(this.currentLevel > MAX_LVL) {
+				State.currentState = Baze.gamefinishState;
+				Baze.gamefinishState.txt_TimeInfo.content = "Your time : 1:24";
+			}else {
+				loadLevel(this.currentLevel);
+				txt_Level.content = "Level : "+this.currentLevel;				
+			}
 		}
 	}
 
