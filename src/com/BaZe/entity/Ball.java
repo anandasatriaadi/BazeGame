@@ -78,7 +78,7 @@ public class Ball extends GameObject{
 			if(tempObject.getId() == ID.wallTile) {
 				if(getBounds().intersects(tempObject.getBounds())) {
 					if(State.currentState == Baze.getGameState()) {
-						PlaySound.playSound("metal_impact.wav", 100);					
+						PlaySound.playSound("metal_impact.wav", 70, false);					
 					}
 					if(getVelX() != 0) {
 						if(getVelX() > 0) {	

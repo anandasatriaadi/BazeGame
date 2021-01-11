@@ -9,17 +9,18 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 
 public class PlaySound {
-	public static synchronized void playSound(final String filename, int volume) {
+	public static synchronized void playSound(final String filename, int volume, boolean loop) {
 		  new Thread(new Runnable() {
 			  public void run() {
 			      try {
 					  Baze.Logs("Playing Sound" + filename);
 					  Clip clip = AudioSystem.getClip();
 					  AudioInputStream inputStream = AudioSystem.getAudioInputStream(new File("resources/sounds/" + filename).getAbsoluteFile());
-
-
 					  clip.open(inputStream);
 					  clip.start();
+					  if(loop) {
+						  clip.loop(Clip.LOOP_CONTINUOUSLY);
+					  }
 					  FloatControl control = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
 					  float range = control.getMinimum();
 					  float result = range * (1 - volume / 100.0f);

@@ -41,7 +41,7 @@ public class Button {
 			onHover = true;
 			if(MouseInput.left) {
 				click.onClick();
-				PlaySound.playSound("button_click.wav", 100);
+				PlaySound.playSound("button_click.wav", 100, false);
 			}
 		} else {
 			onHover = false;
