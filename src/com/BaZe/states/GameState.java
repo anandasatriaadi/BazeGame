@@ -13,15 +13,18 @@ import com.BaZe.tile.Level;
 import com.BaZe.tile.Tile;
 import com.BaZe.ui.Button;
 import com.BaZe.ui.Click;
+import com.BaZe.ui.Container;
 import com.BaZe.ui.Text;
 
 public class GameState extends State{
 	ArrayList<Button> buttons = new ArrayList<Button>();
-	ArrayList<Text> texts = new ArrayList<Text>();
 	
 	private Text txt_Level;
 	private Text txt_Progress;
 	private Text txt_Time;
+	
+	private Container bgContainer;
+	private Container fgContainer;
 	
 	private Handler handler;
 	private static final int MAX_LVL = 7;
@@ -35,25 +38,6 @@ public class GameState extends State{
 		super(window, handler);
 		this.handler = handler;
 		
-		buttons.add(new Button("Back", 100, 50, new Click() {
-					@Override
-					public void onClick() {
-						State.currentState = Baze.getMenuState();
-					}
-				}, Baze.DISPLAY_FONT, new Color(85, 155, 185), new Color(200, 200, 200)));
-		
-		buttons.add(new Button("Restart", 850, 50, new Click() {
-			@Override
-			public void onClick() {
-				Baze.RestartGame();
-				State.currentState = Baze.getGameState();
-			}
-		}, Baze.DISPLAY_FONT, new Color(85, 155, 185), new Color(200, 200, 200)));
-		
-		txt_Level = new Text("Level : " + currentLevel, 475, 40, true, new Color(15, 15, 15) , Baze.DISPLAY_FONT);
-		txt_Progress = new Text("Progress : ", 475, 65, true, new Color(15, 15, 15) , Baze.DISPLAY_FONT);
-		txt_Time = new Text(getDuration(), 475, 90, true, new Color(15, 15, 15) , Baze.DISPLAY_FONT);
-		
 		Level.levelLoader(handler, map, Integer.toString(this.currentLevel));
 	}
 
@@ -63,6 +47,7 @@ public class GameState extends State{
 			button.tick();
 		}
 		txt_Time.content = getDuration();
+		fgContainer.setWidth((int)Math.ceil((passedFloor/(float)totalFloor*230)));
 	}
 
 	@Override
@@ -76,6 +61,9 @@ public class GameState extends State{
 		for(Button button : buttons) {
 			button.render(g);
 		}
+		
+		bgContainer.render(g);
+		fgContainer.render(g);
 		
 		txt_Level.render(g);
 		txt_Progress.render(g);
@@ -95,17 +83,31 @@ public class GameState extends State{
 			}
 		}
 	}
-
-	public int getPassedFloor() {
-		return passedFloor;
-	}
-
-	public void setPassedFloor(int passedFloor) {
-		this.passedFloor = passedFloor;
-		Baze.Logs("passedFloor : " + passedFloor + "/" + totalFloor);
-		txt_Progress.content = "Progress : " + passedFloor + "/" + totalFloor;
+	
+	private void initButton() {
+		// Add buttons
+		buttons.add(new Button("Back", 100, 50, new Click() {
+					@Override
+					public void onClick() {
+						State.currentState = Baze.getMenuState();
+					}
+				}, Baze.DISPLAY_FONT, new Color(85, 155, 185), new Color(200, 200, 200)));
+		
+		buttons.add(new Button("Restart", 850, 50, new Click() {
+			@Override
+			public void onClick() {
+				Baze.RestartGame();
+				State.currentState = Baze.getGameState();
+			}
+		}, Baze.DISPLAY_FONT, new Color(85, 155, 185), new Color(200, 200, 200)));
+				
 	}
 	
+	private void initTitle() {
+		
+	}
+	
+
 	private String getDuration() {
 		int difference = (int) (System.currentTimeMillis() - Baze.startTime);
 		
@@ -125,4 +127,15 @@ public class GameState extends State{
 		}
 		return "" + (difference / 1000);
 	}
+
+	public int getPassedFloor() {
+		return passedFloor;
+	}
+
+	public void setPassedFloor(int passedFloor) {
+		this.passedFloor = passedFloor;
+		Baze.Logs("passedFloor : " + passedFloor + "/" + totalFloor);
+		txt_Progress.content = "Progress : " + passedFloor + "/" + totalFloor;
+	}
+	
 }
