@@ -52,6 +52,7 @@ public class Handler {
 	}
 	
 	public void reset() {
+		this.tick();
 		tile = new LinkedList<Tile>();
 		gameObject = new LinkedList<GameObject>();
 	}

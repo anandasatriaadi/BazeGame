@@ -149,7 +149,7 @@ public class Baze extends Canvas implements Runnable{
 	public void init() {
 		gameState = new GameState(window, handler);
 		menuState = new MenuState(window, handler);
-		State.currentState = gameState;
+		State.currentState = menuState;
 	}
 
 	public static State getMenuState() {

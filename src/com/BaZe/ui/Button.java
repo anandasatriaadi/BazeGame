@@ -10,36 +10,34 @@ import com.BaZe.input.MouseInput;
 import com.BaZe.main.Baze;
 
 public class Button {
-
-	private String text;
 	private int x, y;
 	private FontMetrics fm;
 	private Rectangle bounds;
 	private boolean onHover;
 	private Click click;
 	private Font font;
-	private Color bgColor, darkerBGColor, fontColor;
+	private Color bgColor, darkerBGColor;
+	
+	private Text text;
 	
 	public Button(String text, int x, int y, Click click, Font font, Color bgColor, Color fontColor) {
 		this.x = x;
 		this.y = y;
-		this.text = text;
+		this.text = new Text(text, x, y, true, fontColor, font);
 		this.font = font;
 		this.click = click;
 		this.bgColor = bgColor;
-		this.fontColor = fontColor;
 		this.darkerBGColor = bgColor.darker();
 		onHover = false;
 	}
 	
 	public void updateText(String text) {
-		this.text = text;
+		this.text.content = text;
 	}
 	
 	public void tick() {
 		if(bounds != null && bounds.contains(MouseInput.x, MouseInput.y)) {
 			onHover = true;
-//			System.out.println(MouseInput.x + " " + MouseInput.y);			
 			if(MouseInput.left) {
 				click.onClick();
 			}
@@ -52,19 +50,18 @@ public class Button {
 		g.setFont(font);
 		fm = g.getFontMetrics(font);
 		
-		int stringWidth = (int) (fm.getStringBounds(text, g).getWidth());
-		int stringHeight = (int) (fm.getStringBounds(text, g).getHeight());
+		int stringWidth = (int) (fm.getStringBounds(text.content, g).getWidth());
+		int stringHeight = (int) (fm.getStringBounds(text.content, g).getHeight());
 		
 		if(onHover) {
 			Baze.Logs(this + " mouse in");
 			g.setColor(darkerBGColor);
 			g.fillRoundRect(x - (stringWidth/2 + 20), y - (stringHeight/2 + 3), stringWidth + 40, stringHeight + 6, 50, 50);
-			Text.drawString(g, text, x, y, true, fontColor, font);
 		} else {
 			g.setColor(bgColor);
 			g.fillRoundRect(x - (stringWidth/2 + 20), y - (stringHeight/2 + 3), stringWidth + 40, stringHeight + 6, 50, 50);
-			Text.drawString(g, text, x, y, true, fontColor, font);
 		}
+		text.render(g);
 		bounds = new Rectangle(x - 10, y - stringHeight/2 - 3, stringWidth + 30, stringHeight + 6);
 	}
 }

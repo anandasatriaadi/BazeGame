@@ -19,11 +19,17 @@ import com.BaZe.tile.Tile;
 import com.BaZe.tile.WallTile;
 import com.BaZe.ui.Button;
 import com.BaZe.ui.Click;
+import com.BaZe.ui.Text;
 
 public class GameState extends State{
 
 	Font displayFont = new Font("Comic Sans", Font.PLAIN, 24);
 	ArrayList<Button> buttons = new ArrayList<Button>();
+	ArrayList<Text> texts = new ArrayList<Text>();
+	
+	private Text txt_Level;
+	private Text txt_Progress;
+	
 	private Handler handler;
 	
 	private static final int ROWS = 12;
@@ -56,6 +62,9 @@ public class GameState extends State{
 				State.currentState = Baze.getMenuState();
 			}
 		}, displayFont, new Color(85, 155, 185), new Color(200, 200, 200)));
+		
+		txt_Level = new Text("Level : " + currentLevel, 475, 40, true, new Color(200, 200, 200) , displayFont);
+		txt_Progress = new Text("Progress : ", 475, 65, true, new Color(200, 200, 200) , displayFont);
 		
 		this.loadLevel(currentLevel);
 	}
@@ -136,6 +145,16 @@ public class GameState extends State{
 		for(Button button : buttons) {
 			button.render(g);
 		}
+		
+		txt_Level.render(g);
+		txt_Progress.render(g);
+		
+		if(passedFloor == totalFloor) {
+			handler.reset();	
+			this.currentLevel++;
+			loadLevel(this.currentLevel);
+			txt_Level.content = "Level : "+this.currentLevel;
+		}
 	}
 
 	public int getPassedFloor() {
@@ -145,10 +164,6 @@ public class GameState extends State{
 	public void setPassedFloor(int passedFloor) {
 		this.passedFloor = passedFloor;
 		Baze.Logs("passedFloor : " + passedFloor + "/" + totalFloor);
-		if(passedFloor == totalFloor) {
-			handler.reset();
-			this.currentLevel++;
-			loadLevel(this.currentLevel);
-		}
+		txt_Progress.content = "Progress : " + passedFloor + "/" + totalFloor;
 	}
 }
