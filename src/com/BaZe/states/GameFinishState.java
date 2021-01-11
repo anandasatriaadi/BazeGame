@@ -109,9 +109,9 @@ public class GameFinishState extends State {
 			Graphics2D g2 = (Graphics2D)g;
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		}
-		for(Tile tile : handler.tile) {
-			tile.render(g);
-		}
+		
+		handler.render(g);
+		
 		for (Button button : buttons) {
 			button.render(g);
 		}

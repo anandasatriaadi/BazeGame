@@ -10,28 +10,20 @@ public class Handler {
 	public LinkedList<Tile> tile = new LinkedList<Tile>();
 	
 	public void tick() {
-		for(int i = 0; i < tile.size(); i++) {
-			Tile tempObject = tile.get(i);
-			
-			tempObject.tick();
+		for(Tile to : tile) {			
+			to.tick();
 		}
-		for(int i = 0; i < gameObject.size(); i++) {
-			GameObject tempObject = gameObject.get(i);
-			
-			tempObject.tick();
+		for(GameObject go : gameObject) {			
+			go.tick();
 		}
 	}
 	
 	public void render(Graphics g) {
-		for(int i = 0; i < tile.size(); i++) {
-			Tile tempObject = tile.get(i);
-			
-			tempObject.render(g);
+		for(Tile to : tile) {			
+			to.render(g);
 		}
-		for(int i = 0; i < gameObject.size(); i++) {
-			GameObject tempObject = gameObject.get(i);
-			
-			tempObject.render(g);
+		for(GameObject go : gameObject) {			
+			go.render(g);
 		}
 	}
 	

@@ -29,10 +29,10 @@ public class GameState extends State{
 	private Container fgContainer;
 	
 	private Handler handler;
-	private static final int MAX_LVL = 7;
+	private static final int MAX_LVL = 9;
 	public static int totalFloor;
 	private int passedFloor;
-	private int currentLevel = 1;
+	private int currentLevel = 9;
 	
 	private int[][] map;
 	
@@ -61,12 +61,9 @@ public class GameState extends State{
 			Graphics2D g2 = (Graphics2D)g;
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		}
-		for(Tile tile:handler.tile) {			
-			tile.render(g);
-		}
-		for(GameObject go:handler.gameObject) {			
-			go.render(g);
-		}
+		
+		handler.render(g);
+		
 		for(Button button : buttons) {
 			button.render(g);
 		}
@@ -83,8 +80,8 @@ public class GameState extends State{
 			handler.reset();
 			this.currentLevel++;
 			if(this.currentLevel > MAX_LVL) {
-				State.currentState = Baze.gamefinishState;
-				Baze.gamefinishState.txt_TimeInfo.content = "Your time : " + getDuration();
+				State.currentState = Baze.getGamefinishState();
+				Baze.getGamefinishState().txt_TimeInfo.content = "Your time : " + getDuration();
 			} else {
 				passedFloor = 0;
 				Level.levelLoader(handler, map, Integer.toString(this.currentLevel));

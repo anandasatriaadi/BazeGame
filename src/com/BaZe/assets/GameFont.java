@@ -1,4 +1,4 @@
-package com.BaZe.ui;
+package com.BaZe.assets;
 
 public class GameFont {
 }

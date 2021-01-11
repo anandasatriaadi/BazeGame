@@ -39,7 +39,7 @@ public class Baze extends Canvas implements Runnable{
 	
 	private static MenuState menuState;
 	private static GameState gameState;
-	public static GameFinishState gamefinishState;
+	private static GameFinishState gamefinishState;
 	
 	private MouseInput mouseInput;
 	
@@ -79,7 +79,6 @@ public class Baze extends Canvas implements Runnable{
 	public void run() {
 		this.requestFocus();
 		long lastTime = System.nanoTime();
-//		double amountOfTicks = 60.0;
 		double ns = 1000000000 / 60;
 		double delta = 0;
 		long timer = System.currentTimeMillis();
@@ -112,7 +111,6 @@ public class Baze extends Canvas implements Runnable{
 	}
 	
 	private void tick() {
-		hud.tick();
 		if(State.currentState != null) {
 			if(State.currentState == gameState) {
 				gameHandler.tick();				
@@ -140,10 +138,8 @@ public class Baze extends Canvas implements Runnable{
 		g.setColor(backgroundColor);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		
-//		handler.render(g);
-//		
+		// Renders the current state
 		if(State.currentState != null) {
-//			System.out.println(State.currentState);
 			State.currentState.render(g);
 		}
 		
@@ -186,6 +182,10 @@ public class Baze extends Canvas implements Runnable{
 		return gameState;
 	}
 	
+	public static GameFinishState getGamefinishState() {
+		return gamefinishState;
+	}
+
 	public static void Logs(String msg) {
 		System.out.println(TIMEFORMATER.format(LocalDateTime.now()) + " : " + msg);		
 	}

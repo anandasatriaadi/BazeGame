@@ -26,7 +26,7 @@ public class Ball extends GameObject{
 
 	Random rand = new Random();
 	
-	private Color defaultColor = new Color(randInt(115, 215), randInt(115, 255), randInt(115, 255));
+	private Color defaultColor = new Color(randInt(155, 255), randInt(155, 255), randInt(155, 255));
 	private Color darkerColor = defaultColor.darker();
 	private Color ballColor;
 	
@@ -64,10 +64,10 @@ public class Ball extends GameObject{
 			case MOVE_RIGHT:
 				this.velX = Baze.speed;
 				break;
-			case MOVE_DOWN:
+			case MOVE_UP:
 				this.velY = Baze.speed*-1;
 				break;
-			case MOVE_UP:
+			case MOVE_DOWN:
 				this.velY = Baze.speed;
 				break;
 		}
@@ -82,6 +82,8 @@ public class Ball extends GameObject{
 					if(State.currentState == Baze.getGameState()) {
 						PlaySound.playSound("metal_impact.wav", 70, false);					
 					}
+
+					// If the ball moves in the horizontal pane
 					if(getVelX() != 0) {
 						if(getVelX() > 0) {	
 							int wall = tempObject.getX() - tempObject.getSide();
@@ -92,6 +94,8 @@ public class Ball extends GameObject{
 						}
 						setVelX(0);
 					}
+					
+					// If the ball moves in the vertical pane
 					if(getVelY() != 0) {
 						if(getVelY() > 0) {	
 							int wall = tempObject.getY() - tempObject.getSide();
@@ -124,15 +128,10 @@ public class Ball extends GameObject{
 		
 		g.setColor(ballColor);
 		g.fillOval((int)x, (int)y, side-12, side-12);
-		if(Baze.debug) {			
-			g.setColor(Color.red);
-			g.drawRect((int)x, (int)y, side-12, side-12);
-		}
 	}
 
 	@Override
 	public Rectangle getBounds() {
-		// TODO Auto-generated method stub
 		return new Rectangle((int)x, (int)y, side-12, side-12);
 	}
 

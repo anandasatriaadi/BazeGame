@@ -49,7 +49,7 @@ public class MenuState extends State{
 		for(GameObject go:handler.gameObject) {
 			if(go instanceof Ball) {
 				this.ball = (Ball) go;
-				this.ball.setColor(new Color(155,0,0));
+				this.ball.setColor(new Color(215, 190, 1));
 			}
 		}
 	}
@@ -74,13 +74,10 @@ public class MenuState extends State{
 			Graphics2D g2 = (Graphics2D)g;
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		}
-		for(Tile tile : handler.tile) {
-			tile.render(g);
-		}
-		for(GameObject go : handler.gameObject) {
-			go.render(g);
-		}
-		g.setColor(new Color(0.1f, 0.1f, 0.1f, 0.5f));
+		
+		handler.render(g);
+		
+		g.setColor(new Color(0, 169, 126, 45));
 		g.fillRect(0, 0, Baze.WIDTH, Baze.HEIGHT);
 		g.drawImage(Assets.baze_logo, Baze.WIDTH/2-120, 75, null);
 		
