@@ -9,12 +9,14 @@ import com.BaZe.main.Baze;
 import com.BaZe.main.GameObject;
 import com.BaZe.main.Handler;
 import com.BaZe.main.ID;
+import com.BaZe.states.GameState;
 
 public class Level {
 	private static int ballX;
 	private static int ballY;
 	
 	public static void levelLoader(Handler handler, int[][] map, String name) {
+		GameState.totalFloor = 0;
 		map = new int[Baze.ROWS][Baze.COLUMNS];
 		
 		try {
@@ -48,6 +50,7 @@ public class Level {
 						Tile floorTile = new FloorTile(j * Baze.TILESIDE, i * Baze.TILESIDE, ID.floorTile, Baze.TILESIDE );
 						Baze.Logs("Added FloorTile " + j * Baze.TILESIDE + " " + i * Baze.TILESIDE);
 						handler.addTileObject(floorTile);
+						GameState.totalFloor += 1;
 					}
 					
 					if(map[i][j] == 9) {

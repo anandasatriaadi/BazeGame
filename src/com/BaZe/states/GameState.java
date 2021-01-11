@@ -20,10 +20,11 @@ public class GameState extends State{
 	
 	private Text txt_Level;
 	private Text txt_Progress;
+	private Text txt_Time;
 	
 	private Handler handler;
 	private static final int MAX_LVL = 7;
-	private int totalFloor;
+	public static int totalFloor;
 	private int passedFloor;
 	private int currentLevel = 1;
 	
@@ -50,6 +51,7 @@ public class GameState extends State{
 		
 		txt_Level = new Text("Level : " + currentLevel, 475, 40, true, new Color(200, 200, 200) , Baze.DISPLAY_FONT);
 		txt_Progress = new Text("Progress : ", 475, 65, true, new Color(200, 200, 200) , Baze.DISPLAY_FONT);
+		txt_Time = new Text(getDuration(), 475, 90, true, new Color(200, 200, 200) , Baze.DISPLAY_FONT);
 		
 		Level.levelLoader(handler, map, Integer.toString(this.currentLevel));
 	}
@@ -59,6 +61,7 @@ public class GameState extends State{
 		for(Button button : buttons) {
 			button.tick();
 		}
+		txt_Time.content = getDuration();
 	}
 
 	@Override
@@ -75,6 +78,7 @@ public class GameState extends State{
 		
 		txt_Level.render(g);
 		txt_Progress.render(g);
+		txt_Time.render(g);
 		
 		if(passedFloor == totalFloor) {
 			handler.reset();	
@@ -82,7 +86,8 @@ public class GameState extends State{
 			if(this.currentLevel > MAX_LVL) {
 				State.currentState = Baze.gamefinishState;
 				Baze.gamefinishState.txt_TimeInfo.content = "Your time : " + getDuration();
-			}else {
+			} else {
+				passedFloor = 0;
 				Level.levelLoader(handler, map, Integer.toString(this.currentLevel));
 				txt_Level.content = "Level : "+ this.currentLevel;				
 			}
@@ -100,13 +105,22 @@ public class GameState extends State{
 	}
 	
 	private String getDuration() {
-		int difference = (int) (System.currentTimeMillis() - Baze.startTime) / 1000;
+		int difference = (int) (System.currentTimeMillis() - Baze.startTime);
 		
-		if(difference > 60) {
-			int min = difference / 60;
-			int second = difference % 60;
-			return min + ":" + second;
+		if(difference > 60000) {
+			int min = difference / 60 / 1000;
+			int sec = (difference / 1000) % 60;
+			int mili = difference / 10;
+			String minStr, secStr;
+			
+			if(min < 10) minStr = "0" + Integer.toString(min);
+			else minStr = Integer.toString(min);
+			
+			if(sec < 10) secStr = "0" + Integer.toString(sec);
+			else secStr = Integer.toString(sec);
+			
+			return minStr + ":" + secStr;
 		}
-		return "" + difference;
+		return "" + (difference / 1000);
 	}
 }

@@ -8,6 +8,7 @@ import com.BaZe.main.ID;
 
 public class FloorTile extends Tile{
 
+	public int image;
 	public Boolean isPassed = false;
 	
 	public FloorTile(int x, int y, ID id, int side) {
