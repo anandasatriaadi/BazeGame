@@ -19,10 +19,13 @@ public class Baze extends Canvas implements Runnable{
 
 	private static final long serialVersionUID = 1652027885447519067L;
 	public static final int WIDTH = 60*16, HEIGHT = WIDTH / 16 * 12;
+	public static final int ROWS = 12;
+	public static final int COLUMNS = 16;
+	public static final int TILESIDE = Baze.WIDTH/COLUMNS;
 	public static float speed = (float) Math.ceil(WIDTH/40);
 	public static final Font DISPLAY_FONT = new Font("Comic Sans", Font.BOLD, 24);
 	private static final DateTimeFormatter TIMEFORMATER = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss");
-	
+	public static long startTime;
 	
 	private static Window window;
 	private Thread gameThread;

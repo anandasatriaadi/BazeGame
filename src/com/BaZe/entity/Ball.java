@@ -22,9 +22,9 @@ public class Ball extends GameObject{
 
 	Random rand = new Random();
 	
-	Color defaultColor = new Color(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255));
-	Color darkerColor = defaultColor.darker();
-	Color ballColor;
+	private Color defaultColor = new Color(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255));
+	private Color darkerColor = defaultColor.darker();
+	private Color ballColor;
 	
 	Handler handler;
 
@@ -37,7 +37,6 @@ public class Ball extends GameObject{
 	
 	@Override
 	public void tick() {
-		
 		if(velX == 0 && velY == 0) {
 			ballColor = defaultColor;
 		} else {
@@ -126,4 +125,8 @@ public class Ball extends GameObject{
 		return new Rectangle((int)x, (int)y, side-12, side-12);
 	}
 
+	public void setColor(Color c) {
+		this.defaultColor = c;
+		this.darkerColor = c.darker();
+	}
 }

@@ -62,6 +62,6 @@ public class Button {
 			g.fillRoundRect(x - (stringWidth/2 + 20), y - (stringHeight/2 + 3), stringWidth + 40, stringHeight + 6, 50, 50);
 		}
 		text.render(g);
-		bounds = new Rectangle(x - 10, y - stringHeight/2 - 3, stringWidth + 30, stringHeight + 6);
+		bounds = new Rectangle(x - (stringWidth/2 + 20), y - (stringHeight/2 + 3), stringWidth + 40, stringHeight + 6);
 	}
 }
