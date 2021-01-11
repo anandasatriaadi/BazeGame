@@ -169,6 +169,7 @@ public class Baze extends Canvas implements Runnable{
 	}
 	
 	public static void RestartGame() {
+		gameHandler.reset();
 		gameState = new GameState(window, gameHandler);
 	}
 

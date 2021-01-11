@@ -43,7 +43,7 @@ public class MenuState extends State{
 
 			@Override
 			public void onClick() {
-//				Baze.RestartGame();
+				Baze.RestartGame();
 				State.currentState = Baze.getGameState();
 			}
 		}, Baze.DISPLAY_FONT, new Color(185, 185, 185), new Color(45, 45, 45)));

@@ -57,8 +57,8 @@ public class GameState extends State{
 		buttons.add(new Button("Restart", 850, 50, new Click() {
 			@Override
 			public void onClick() {
-				System.out.println("Clicked");
-				State.currentState = Baze.getMenuState();
+				Baze.RestartGame();
+				State.currentState = Baze.getGameState();
 			}
 		}, Baze.DISPLAY_FONT, new Color(85, 155, 185), new Color(200, 200, 200)));
 		
