@@ -12,6 +12,11 @@ import com.BaZe.main.ID;
 import com.BaZe.tile.Tile;
 
 public class Ball extends GameObject{
+	public static final int MOVE_LEFT = 0;
+	public static final int MOVE_RIGHT = 1;
+	public static final int MOVE_DOWN = 2;
+	public static final int MOVE_UP = 3;
+
 	int width = Baze.WIDTH - (Baze.WIDTH / 16);
 	int height = Baze.HEIGHT - (Baze.WIDTH / 16);
 
@@ -46,6 +51,23 @@ public class Ball extends GameObject{
 		y = Baze.clamp(y, 0, height);
 		
 		collide();	
+	}
+	
+	public void move(int Movement) {
+		switch(Movement) {
+			case MOVE_LEFT:
+				this.velX = Baze.speed*-1;
+				break;
+			case MOVE_RIGHT:
+				this.velX = Baze.speed;
+				break;
+			case MOVE_DOWN:
+				this.velY = Baze.speed*-1;
+				break;
+			case MOVE_UP:
+				this.velY = Baze.speed;
+				break;
+		}
 	}
 	
 	private void collide() {

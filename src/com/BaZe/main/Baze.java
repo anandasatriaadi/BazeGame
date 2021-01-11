@@ -25,7 +25,8 @@ public class Baze extends Canvas implements Runnable{
 	private Thread gameThread;
 	private boolean running = false;
 	
-	private Handler handler;
+	private Handler gameHandler;
+	private Handler menuHandler;
 	private HUD hud;
 	
 	private static MenuState menuState;
@@ -33,13 +34,15 @@ public class Baze extends Canvas implements Runnable{
 	
 	private MouseInput mouseInput;
 	
-	public static boolean debug = true;
+	public static boolean debug = false;
 	
 	public Baze() {
-		handler = new Handler();
+		gameHandler = new Handler();
+		menuHandler = new Handler();
 		hud = new HUD();
+		
 		mouseInput = new MouseInput();
-		this.addKeyListener(new KeyInput(handler));
+		this.addKeyListener(new KeyInput(gameHandler));
 		this.addMouseMotionListener(mouseInput);
 		this.addMouseListener(mouseInput);
 
@@ -98,10 +101,13 @@ public class Baze extends Canvas implements Runnable{
 	}
 	
 	private void tick() {
-		handler.tick();
 		hud.tick();
 		if(State.currentState != null) {
-//			System.out.println(State.currentState);
+			if(State.currentState == gameState) {
+				gameHandler.tick();				
+			}else {
+				menuHandler.tick();				
+			}
 			State.currentState.tick();
 		}
 	}
@@ -147,8 +153,8 @@ public class Baze extends Canvas implements Runnable{
 	}
 	
 	public void init() {
-		gameState = new GameState(window, handler);
-		menuState = new MenuState(window, handler);
+		gameState = new GameState(window, gameHandler);
+		menuState = new MenuState(window, menuHandler);
 		State.currentState = menuState;
 	}
 
@@ -165,6 +171,8 @@ public class Baze extends Canvas implements Runnable{
 	}
 	
 	public static void updatePassedFloor(int value) {
-		gameState.setPassedFloor(gameState.getPassedFloor() + value);
+		if(State.currentState == gameState) {			
+			gameState.setPassedFloor(gameState.getPassedFloor() + value);
+		}
 	}
 }
