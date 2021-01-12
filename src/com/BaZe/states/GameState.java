@@ -3,9 +3,11 @@ package com.BaZe.states;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
 
+import com.BaZe.assets.Assets;
 import com.BaZe.main.Baze;
 import com.BaZe.main.GameObject;
 import com.BaZe.main.Handler;
@@ -31,8 +33,9 @@ public class GameState extends State{
 	private Handler handler;
 	private static final int MAX_LVL = 9;
 	public static int totalFloor;
+	public static Image CURRENT_WALL = Assets.brick_tile;
 	private int passedFloor;
-	private int currentLevel = 9;
+	public static int CURRENT_LVL = 1;
 	
 	private int[][] map;
 	
@@ -43,7 +46,9 @@ public class GameState extends State{
 		initButton();
 		initTitle();
 		
-		Level.levelLoader(handler, map, Integer.toString(this.currentLevel));
+		this.CURRENT_LVL = 1;
+		
+		Level.levelLoader(handler, map, Integer.toString(this.CURRENT_LVL));
 	}
 
 	@Override
@@ -78,14 +83,18 @@ public class GameState extends State{
 		if(passedFloor == totalFloor) {
 			PlaySound.playSound("level_complete.wav", 70, false);
 			handler.reset();
-			this.currentLevel++;
-			if(this.currentLevel > MAX_LVL) {
+			this.CURRENT_LVL++;
+			if(this.CURRENT_LVL >= 5) {
+				Baze.Logs("Level >= 5");
+				CURRENT_WALL = Assets.metal_wall;
+			}
+			if(this.CURRENT_LVL > MAX_LVL) {
 				State.currentState = Baze.getGamefinishState();
 				Baze.getGamefinishState().txt_TimeInfo.content = "Your time : " + getDuration();
 			} else {
 				passedFloor = 0;
-				Level.levelLoader(handler, map, Integer.toString(this.currentLevel));
-				txt_Level.content = "Level : "+ this.currentLevel;				
+				Level.levelLoader(handler, map, Integer.toString(this.CURRENT_LVL));
+				txt_Level.content = "Level : "+ this.CURRENT_LVL;				
 			}
 		}
 	}
@@ -115,7 +124,7 @@ public class GameState extends State{
 		fgContainer = new Container(470 - (230/2), 105, 0, 5, new Color(85, 215, 85), false);
 		
 		//Add texts
-		txt_Level = new Text("Level : " + currentLevel, 475, 40, true, new Color(215, 215, 215) , Baze.DISPLAY_FONT);
+		txt_Level = new Text("Level : " + CURRENT_LVL, 475, 40, true, new Color(215, 215, 215) , Baze.DISPLAY_FONT);
 		txt_Progress = new Text("Progress : ", 475, 65, true, new Color(215, 215, 215) , Baze.DISPLAY_FONT);
 		txt_Time = new Text(getDuration(), 475, 90, true, new Color(215, 215, 215) , Baze.DISPLAY_FONT);
 		

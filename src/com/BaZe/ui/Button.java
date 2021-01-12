@@ -20,7 +20,6 @@ public class Button {
 	private Click click;
 	private Font font;
 	private Color bgColor, darkerBGColor;
-	
 	private Text text;
 	
 	public Button(String text, int x, int y, Click click, Font font, Color bgColor, Color fontColor) {
@@ -51,6 +50,10 @@ public class Button {
 	
 	public void updateText(String text) {
 		this.text.content = text;
+	}
+	
+	public String getText() {
+		return this.text.content;
 	}
 	
 	public void tick() {

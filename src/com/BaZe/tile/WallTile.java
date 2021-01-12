@@ -2,15 +2,8 @@ package com.BaZe.tile;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
+import com.BaZe.states.GameState;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
-import com.BaZe.assets.Assets;
 import com.BaZe.main.ID;
 
 public class WallTile extends Tile{
@@ -28,7 +21,7 @@ public class WallTile extends Tile{
 
 	@Override
 	public void render(Graphics g) {
-		g.drawImage(Assets.metal_wall, x, y, null);
+		g.drawImage(GameState.CURRENT_WALL, x, y, null);
 //		g.setColor(Color.BLACK);
 //		g.fillRect(x, y, side, side);
 //		g.setColor(color);

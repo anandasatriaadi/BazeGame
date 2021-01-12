@@ -8,12 +8,14 @@ import java.awt.image.BufferStrategy;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import com.BaZe.assets.Assets;
 import com.BaZe.input.KeyInput;
 import com.BaZe.input.MouseInput;
 import com.BaZe.states.GameFinishState;
 import com.BaZe.states.GameState;
 import com.BaZe.states.MenuState;
 import com.BaZe.states.State;
+import com.BaZe.tile.WallTile;
 
 public class Baze extends Canvas implements Runnable{
 
@@ -169,6 +171,7 @@ public class Baze extends Canvas implements Runnable{
 	}
 	
 	public static void RestartGame() {
+		GameState.CURRENT_WALL = Assets.brick_tile;
 		startTime = System.currentTimeMillis();
 		gameHandler.reset();
 		gameState = new GameState(window, gameHandler);

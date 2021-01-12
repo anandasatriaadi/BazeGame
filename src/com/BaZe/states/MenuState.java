@@ -21,11 +21,10 @@ import com.BaZe.ui.Text;
 
 public class MenuState extends State{
 	private ArrayList<Button> buttons = new ArrayList<Button>();
-	
 	private Text title;
-	
 	private Handler handler;
 	private Ball ball = null;
+	private Button btn_play;
 	private Random rand = new Random();
 	
 	private int[][] map;
@@ -34,15 +33,18 @@ public class MenuState extends State{
 	public MenuState(Window window, Handler handler) {
 		super(window, handler);
 		this.handler = handler;
-		
-		buttons.add(new Button("Play", Baze.WIDTH/2, Baze.HEIGHT/2 + 200, 100, 30, new Click() {
+		btn_play = new Button("Play", Baze.WIDTH/2, Baze.HEIGHT/2 + 200, 100, 30, new Click() {
 			@Override
 			public void onClick() {
-				Baze.startTime = System.currentTimeMillis();
-				Baze.RestartGame();
+				if(btn_play.getText() == "Play") {
+					Baze.startTime = System.currentTimeMillis();
+					Baze.RestartGame();					
+				}
 				State.currentState = Baze.getGameState();
 			}
-		}, Baze.DISPLAY_FONT, new Color(0, 169, 126), new Color(215, 190, 1)));
+		}, Baze.DISPLAY_FONT, new Color(0, 169, 126), new Color(215, 190, 1));
+		
+		buttons.add(btn_play);
 		
 		Level.levelLoader(handler, map, "mainmenu");
 		
@@ -57,6 +59,12 @@ public class MenuState extends State{
 
 	@Override
 	public void tick() {
+		if(GameState.CURRENT_LVL == 1) {
+			btn_play.updateText("Play");
+		}else {
+			btn_play.updateText("Continue");			
+		}
+		
 		for(Button button : buttons) {
 			button.tick();
 		}
